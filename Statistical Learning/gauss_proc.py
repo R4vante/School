@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from scipy.stats import t
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.gaussian_process.kernels import ExpSineSquared, WhiteKernel, RBF
@@ -74,12 +75,13 @@ ax.plot(x[len(X_train):],y[len(X_train):], linestyle='dotted', label="Test set")
 
 #Plot the mean prediction of the regression
 ax.plot(x, mean_prediction, label="Mean prediction")
+t_crit = t.ppf(1-0.05/2, 250-1)
 
 # Make a fill to indicate standard deviation.
 ax.fill_between(
     x.ravel(),
-    mean_prediction -  std_prediction,
-    mean_prediction + std_prediction,
+    mean_prediction - t_crit * std_prediction,
+    mean_prediction + t_crit * std_prediction,
     alpha = 0.5, 
     label = r"95% confidence interval",
 )
@@ -103,6 +105,7 @@ x_new = x_new.reshape(-1,1)
     - std_pred2: standard deviation prediction of given dataset. """
 
 mean_pred2, std_pred2 = gaussian_process.predict(x_new, return_std=True)
+t_crit = t.ppf(1-0.05/2, 750-1)
 
 """ Create second plot for given regression. """
 
@@ -116,8 +119,8 @@ ax2.plot(x_new, mean_pred2, label="Mean prediction", color='green')
 # Fill of confidence level
 ax2.fill_between(
     x_new.ravel(),
-    mean_pred2 - std_pred2,
-    mean_pred2 + std_pred2,
+    mean_pred2 - t_crit * std_pred2,
+    mean_pred2 + t_crit * std_pred2,
     alpha=0.5,
     color='red',
     label=r"95% confidence interval",
