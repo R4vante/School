@@ -21,7 +21,7 @@ def generate_dataset(N,noiseSTD):
             y: list of y values
     """   
 
-    x = np.linspace(0, 4*np.pi, N)
+    x = np.linspace(0, 10*np.pi, N)
     y = 2 - np.sin(x) - 0.5*x + np.exp(x/6) + noiseSTD*np.random.randn(len(x))
     return x, y
 
