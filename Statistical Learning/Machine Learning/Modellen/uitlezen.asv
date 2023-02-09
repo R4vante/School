@@ -1,0 +1,14 @@
+clc; clear;
+
+Data = readtable("Data.xlsx");
+
+lin_noval = linear_noval(Data);
+
+display(lin_noval)
+
+y1l_fit = lin_noval.predictFcn(Data);
+
+figure(1);
+hold on;
+scatter(Data, "x", "y", "filled")
+plot()
