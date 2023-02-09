@@ -1,30 +1,35 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
-import vliegveld
-
-file_leroy = "Data.xlsx"
-
-df = 
-
+from vliegveld import Import
 
 names = {"doorlooptijd [s]":"Handbagage", 
                     "doorlooptijd [s].1":"Bodyscan",
                     "doorlooptijd [s].2":"Douane"}
 
-# meetnmr = index + 1
-df = df.rename(columns=names)
-df = df.loc[:, ~df.columns.str.contains("^metingnr")]
 
-# haalt uit de namen van de kolommen uit de dataframe en zet ze in een lijst.
-column_names = df.columns.values.tolist()
 
-# Boxplot
-fig, ax = plt.subplots(1,1)
+if __name__ == "__main__":
+    df, column_names = Import.import_data("Data.xlsx", names)
 
-# patch_artist zorgt ervoor dat de vierkantjes gevuld worden met een kleur (standaard = blauw)
-ax.boxplot(df.values, patch_artist=True, labels=column_names)
-plt.show()
+    # meetnmr = index + 1
+
+
+    ## Print Tables
+    ## Dataframe
+    print(df)
+
+    # Test for normal distribution
+    print("\nHandbagage\n\n")
+    print(Import.Test_normal(df['Handbagage'].values))
+
+    print("\nBodyscan\n\n")
+    print(Import.Test_normal(df['Bodyscan'].values))
+
+    print("\nDouane\n\n")
+    print(Import.Test_normal(df['Douane'].values))
+
+    # Boxplot
+    Import.Boxplot(df.values, column_names)
 
 
 
