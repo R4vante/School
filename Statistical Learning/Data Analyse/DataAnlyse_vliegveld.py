@@ -22,13 +22,13 @@ if __name__ == "__main__":
 
     # Test for normal distribution
     print("\nHandbagage\n\n")
-    print(Test.test_normal(df['Handbagage'].values))
+    print(Test.test_binom(df['Handbagage'].values))
 
     print("\nBodyscan\n\n")
-    print(Test.test_normal(df['Bodyscan'].values))
+    print(Test.test_binom(df['Bodyscan'].values))
 
     print("\nDouane\n\n")
-    print(Test.test_normal(df['Douane'].values))
+    print(Test.test_binom(df['Douane'].values))
 
 
 

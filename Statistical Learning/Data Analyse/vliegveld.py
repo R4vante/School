@@ -65,6 +65,23 @@ class Test:
             print("Null Hypothesis accepted: The test results detect a significant relationship with the normal distribution.")
         print("\n", 100*"-", "\n")
 
+
+    def test_binom(x):
+
+        stat, p = scipy.stats.normaltest(x)
+
+        print("\n", 100*"-", "\n")
+        print("\nH0: The results follow a binomial distribution.\n")
+
+        print("\n", 100*"-", "\n")
+        print("k^2: %.3f \nP-value: %.3g\n" %(stat, p))
+
+        if p <= 0.05:
+            print("Null Hypothesis rejected: The test results don't detect a significant relationship with the binomial distribution.")
+        
+        else:
+            print("Null Hypothesis accepted: The test results detect a significant relationship with the binomial distribution.")
+        print("\n", 100*"-", "\n")
     
 class Plot:
     def Boxplot(df, labels):
