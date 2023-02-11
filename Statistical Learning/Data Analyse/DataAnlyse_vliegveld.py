@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from vliegveld import Import
+from vliegveld import Import, Test, Plot
+import seaborn as sns
+import statsmodels.graphics.gofplots as sm
 
 names = {"doorlooptijd [s]":"Handbagage", 
                     "doorlooptijd [s].1":"Bodyscan",
@@ -16,20 +18,24 @@ if __name__ == "__main__":
 
     ## Print Tables
     ## Dataframe
-    print(df)
+    print(df.describe())
 
     # Test for normal distribution
     print("\nHandbagage\n\n")
-    print(Import.Test_normal(df['Handbagage'].values))
+    print(Test.test_normal(df['Handbagage'].values))
 
     print("\nBodyscan\n\n")
-    print(Import.Test_normal(df['Bodyscan'].values))
+    print(Test.test_normal(df['Bodyscan'].values))
 
     print("\nDouane\n\n")
-    print(Import.Test_normal(df['Douane'].values))
+    print(Test.test_normal(df['Douane'].values))
+
+
 
     # Boxplot
-    Import.Boxplot(df.values, column_names)
+    Plot.Boxplot(df.values, column_names)
 
+    Plot.Normplot(df['Handbagage'])
+    plt.show()
 
 

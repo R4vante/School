@@ -2,8 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
+from scipy.linalg import norm
 import warnings
-import sys
+import seaborn as sns
+import statsmodels.graphics.gofplots as sm
 
 class Import:
     def __init__(self):
@@ -34,20 +36,29 @@ class Import:
         return df, column_names
 
 
+class Test:
 
-    def Test_normal(x):
+    def test_normal(x):
+        """
+        test_normal Test data for normal distribution
+
+        Args:
+            x (array): list of values to test
+        """        
+
+        x = x / norm(x)
 
         warnings.filterwarnings("ignore", category=UserWarning)
 
-        k2, p = scipy.stats.normaltest(x)
+        stat, p = scipy.stats.normaltest(x)
 
         print("\n", 100*"-", "\n")
         print("\nH0: The results follow a normal distribution.\n")
 
         print("\n", 100*"-", "\n")
-        print("k^2: %.3f \nP-value: %.3g\n" %(k2, p))
+        print("k^2: %.3f \nP-value: %.3g\n" %(stat, p))
 
-        if p <= 0.5:
+        if p <= 0.05:
             print("Null Hypothesis rejected: The test results don't detect a significant relationship with the normal distribution.")
         
         else:
@@ -55,9 +66,30 @@ class Import:
         print("\n", 100*"-", "\n")
 
     
+class Plot:
     def Boxplot(df, labels):
+        """
+        Boxplot Create boxplot of given datapoint
+
+        Args:
+            df (datafram): dataframe containing the datapoints
+            labels (list): list of columnsnames
+        """        
+        
         fig, ax = plt.subplots(1,1)
         ax.boxplot(df, patch_artist=True, labels=labels)
-        plt.show()
 
+
+    def Normplot(x):
+        """
+        Normplot Hist- and kde-plot of data following a normal distribution. Also make qq (residu) plot for testing normaldistribution
+
+        Args:
+            x (array): array of datapoints to test
+        """        
+        fig, ax = plt.subplots(1,2)
+        sns.histplot(x, kde=True, ax=ax[0])
+        sm.ProbPlot(x).qqplot(line='s', ax=ax[1])
+        ax[0].grid(True)
+        ax[1].grid(True)
     
