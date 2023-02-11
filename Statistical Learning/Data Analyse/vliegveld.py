@@ -93,5 +93,5 @@ class Plot:
         ax[0].grid(True)
         ax[1].grid(True)
 
-        "hoi"
+        "hoihoi"
     
