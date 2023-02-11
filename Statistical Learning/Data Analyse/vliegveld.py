@@ -92,4 +92,6 @@ class Plot:
         sm.ProbPlot(x).qqplot(line='s', ax=ax[1])
         ax[0].grid(True)
         ax[1].grid(True)
+
+        "hoi"
     
