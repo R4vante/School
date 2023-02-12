@@ -5,11 +5,11 @@ from scipy.linalg import eigh_tridiagonal
 
 N = 1000
 dx = 1/N
-x = np.linspace(0, 1, N+1)
+x = np.linspace(-1, 1, N+1)
 
 
 def mL2V(x):
-    return 100*((x<=0.2) + (x > 0.8)).astype(float)
+    return 100*((x<=-0.5) + (x > 0.5)).astype(float)
 
 def CalcSchroedinger(x, dx):
     main_diag = 1/(dx**2) + mL2V(x)[1:-1]
