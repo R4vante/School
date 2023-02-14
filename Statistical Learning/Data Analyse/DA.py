@@ -40,14 +40,17 @@ class Import:
         df_melt.columns = ["index", "treatment", "value"]
         
         mean = []
+        std = []
         for col in df.columns:
             means = df[col].values.mean()
+            stds = df[col].values.std()
             mean.append(means)
+            std.append(stds)
         means
 
         df_melt["means"] = np.repeat(mean,self.n)
 
-        return df, df_melt, names, mean
+        return df, df_melt, names, mean, std
 
 
 class Anova:
