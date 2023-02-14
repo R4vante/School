@@ -1,41 +1,28 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from vliegveld import Import, Test, Plot
+from DOE import Data
 import seaborn as sns
 import statsmodels.graphics.gofplots as sm
 
-names = {"doorlooptijd [s]":"Handbagage", 
+column_names = {"doorlooptijd [s]":"Handbagage", 
                     "doorlooptijd [s].1":"Bodyscan",
                     "doorlooptijd [s].2":"Douane"}
 
 
 
 if __name__ == "__main__":
-    df, column_names = Import.import_data("Data.xlsx", names)
+    n = 10
+    a = 3
 
-    # meetnmr = index + 1
+    df, df_melt, names, mean = Data.import_df("Data.xlsx", column_names, n)
+    print(df_melt)
 
+    Data.boxplot(df_melt)
 
-    ## Print Tables
-    ## Dataframe
-    print(df.describe())
+    Data.anova(df_melt, 0.05)
 
-    # Test for normal distribution
-    print("\nHandbagage\n\n")
-    print(Test.test_binom(df['Handbagage'].values))
+    Data.res_plot(df_melt)
 
-    print("\nBodyscan\n\n")
-    print(Test.test_binom(df['Bodyscan'].values))
-
-    print("\nDouane\n\n")
-    print(Test.test_binom(df['Douane'].values))
-
-
-
-    # Boxplot
-    Plot.Boxplot(df.values, column_names)
-
-    Plot.Normplot(df['Handbagage'])
-    plt.show()
+    Data.norm_plot(df_melt)
 
 

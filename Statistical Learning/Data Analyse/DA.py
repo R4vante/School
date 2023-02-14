@@ -9,31 +9,31 @@ import warnings
 
 class Import:
 
-    def __init__(self, file, sheet_name, n, a, alpha):
-        self.file = file
-        self.sheet_name = sheet_name
-        self.n = n
-        self.a = a
+    def __init__(self, file, columns, n):
 
-    def import_df(self):
+        self.file = file
+        self.columns = columns
+        self.n = n
+
+    def import_df(self):      
         """
-        import_df Import excel sheet to dataframe
+        import_data Import excel file to data framme
 
         Args:
-            file (str): file name
-            sheet_name (str): sheet name
-            n (int): number of replicates
+            filename (str): Name of the excel file
+            names (dict): dictionary of current column names and replaced column names (eg. {oldname:newname})
 
         Returns:
-            object: returns object containing
-                    - df (dataframe): initial datatframe
-                    - df_melt (dataframe): newly formatted data_frame for easy calculations
-                    - names (list): list of column names of df
-                    - mean (list): list containing means of treatments
+            Dataframe: Dataframe of the cleaned excel file
         """        
-        df = pd.read_excel(self.file, sheet_name=self.sheet_name, header = 1)
-        names = df['treatment'][:].values.tolist()
-        df = df.T.tail(-1)
+
+        df = pd.read_excel(self.file, header=1)
+        df = df.dropna(axis=1)
+        df = df.loc[:,~df.columns.str.contains("^metingnr")]
+        df = df.rename(columns=self.columns)
+        names = df.columns.values.tolist()
+
+        # df = df.T.tail(-1)
         df.columns = names
 
         df_melt = pd.melt(df.reset_index(), id_vars="index", value_vars=df.columns)
@@ -48,6 +48,7 @@ class Import:
         df_melt["means"] = np.repeat(mean,self.n)
 
         return df, df_melt, names, mean
+
 
 class Anova:
 
