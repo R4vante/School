@@ -90,8 +90,8 @@ class Anova:
         mse = sse/(self.a*(self.n-1))
         t_crit = stats.t.ppf(q=1-self.alpha/2, df=dfe)
 
-        lsd = t_crit * np.sqrt(2*mse/self.n)
-
+        lsd = t_crit * np.sqrt(mse/self.n)
+        lsd2 = t_crit * np.sqrt(2*mse/self.n)
         i = 0
 
         while i < len(self.mean)-1:
@@ -103,7 +103,7 @@ class Anova:
                     print("%i-%i: no significant difference " %(i+1,j+1))
             i+=1
 
-        return self.df_melt, anova_table, pvalue, lsd
+        return self.df_melt, anova_table, pvalue, lsd, lsd2
 
 
 
