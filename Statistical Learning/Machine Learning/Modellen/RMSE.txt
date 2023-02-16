@@ -1,0 +1,29 @@
+lin_noval = 0.90873
+lin_hold = 0.912
+lin_cross = 0.912
+
+expgpr_noval = 0.30285
+expgpr_hold = 0.41361
+exp_cross = 0.3911
+
+sqexp_noval = 0.36398
+sqexp_hold = 0.39045
+sqpexp_cross = 0.38154
+
+
+Test data
+
+lin_noval = 0.94577
+lin_hold = 0.94577
+lin_cross = 0.94577
+
+expgpr_noval = 0.41848
+expgpr_hold = 0.41848 
+expgpr_cross = 0.414848
+
+sqexp_noval = 0.4142
+sqexp_hold = 0.41242
+sqexp_cross = 0.41242
+
+
+
