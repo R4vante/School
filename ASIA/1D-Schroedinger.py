@@ -9,7 +9,8 @@ x = np.linspace(0, 1, N+1)
 
 
 def mL2V(x):
-    return 100*((x<=0.2) + (x > 0.8)).astype(float)
+    return 500*np.exp(-(x-0.5)**2)
+
 
 def CalcSchroedinger(x, dx):
     main_diag = 1/(dx**2) + mL2V(x)[1:-1]
@@ -46,6 +47,7 @@ if __name__ == "__main__":
     ax.set_ylabel(r"$\left|\psi\right|^2$", fontsize=15)
     
     for i in range(0,3):
-        ax.plot(x[1:-1], np.abs(psi[i])**2)
+        ax.plot(x[1:-1], np.abs(psi[i])**2, label=("$\psi_{%i}$" %i))
     
+    ax.legend(loc='upper left')
     plt.show()
