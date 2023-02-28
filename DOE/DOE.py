@@ -122,7 +122,7 @@ class Anova_NoBlock:
                     print("%i-%i: no significant difference " %(i+1,j+1))
             i+=1
 
-        return self.df_melt, anova_table, pvalue, lsd
+        return self.df_melt, anova_table, pvalue, lsd, mse
 
 
 
@@ -136,6 +136,18 @@ class Anova_NoBlock:
         plt.figure()
         sns.boxplot(data=self.df_melt, x="treatment", y="value")
         plt.show()
+
+    def meanplot(self, unit=None):
+        fig, ax = plt.subplots(1,1)
+        ax.grid(True)
+        ax.scatter(self.names, self.mean)
+        ax.set_xlabel("treatment")
+        if unit == None:
+            ax.set_ylabel("mean")
+        else:
+            ax.set_ylabel(f"mean [{unit}]")
+        plt.show()
+
 
     def norm_plot(self):
         """
