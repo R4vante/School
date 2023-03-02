@@ -18,163 +18,106 @@ data = readtable("Data.xlsx");
 
 
 %% Plot linear
-fig1 = figure(1);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, lin_noval.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig1, "Figures/lin_noval.jpg")
-
-fig2 = figure(2);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, lin_hold.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig2, "Figures/lin_hold.jpg")
-
-fig3 = figure(3);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, lin_cross.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig3, "Figures/lin_cross.jpg")
+plot_model(data, lin_noval, 1, "lin_noval")
+plot_model(data, lin_hold, 1, "lin_hold")
+plot_model(data, lin_cross, 1, "lin_cross")
 
 %% Plot expGPR
 
-fig4 = figure(4);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, exp_noval.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig4, "Figures/exp_noval.jpg")
-
-fig5 = figure(5);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, exp_hold.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig5, "Figures/exp_hold.jpg")
-
-fig6 = figure(6);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, exp_cross.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig6, "Figures/exp_cross.jpg")
-
+plot_model(data, exp_noval, 1, "exp_noval")
+plot_model(data, exp_hold, 1, "exp_hold")
+plot_model(data, exp_cross, 1, "exp_cross")
 %% Plot sqrexp
 
-fig7 = figure(7);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, sqexp_noval.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig7, "Figures/sqexp_noval.jpg")
-
-fig8 = figure(8);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, sqexp_hold.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig8, "Figures/sqexp_hold.jpg")
-
-fig9 = figure(9);
-grid()
-hold on;
-scatter(data.x, data.y, "filled");
-plot(data.x, sqexp_cross.predictFcn(data), LineWidth=3);
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig9, "Figures/sqexp_cross.jpg")
+plot_model(data, sqexp_noval, 1, "sqexp_noval")
+plot_model(data, sqexp_hold, 1, "sqexp_hold")
+plot_model(data, sqexp_cross, 1, "sqexp_cross")
 
 
-%% test exp op testdata
-[x_t, y_t] = generate_dataset(250, 0.4);
-data_t = table(x_t', y_t', VariableNames={'x', 'y'});
+%% Genereer testdata
+data_t = readtable("test_data.xlsx");
 
-fig10 = figure(10);
-grid();
-hold on;
-scatter(data_t.x, data_t.y, "filled");
-plot(data_t.x, exp_noval.predictFcn(data_t), LineWidth=3)
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig10, "Figures/exp_noval_test.jpg")
 
-fig11 = figure(11);
-grid();
-hold on;
-scatter(data_t.x, data_t.y, "filled");
-plot(data_t.x, exp_hold.predictFcn(data_t), LineWidth=3)
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig11, "Figures/exp_hold_test.jpg")
+%% Bereken test rmse's
 
-fig12 = figure(12);
-grid();
-hold on;
-scatter(data_t.x, data_t.y, "filled");
-plot(data_t.x, exp_cross.predictFcn(data_t), LineWidth=3)
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig12, "Figures/exp_cross_test.jpg")
+err_lin_noval = rmse_test(data_t, lin_noval);
+err_lin_hold = rmse_test(data_t, lin_hold);
+err_lin_cross = rmse_test(data_t, lin_cross);
+
+err_exp_noval = rmse_test(data_t, exp_noval);
+err_exp_hold = rmse_test(data_t, exp_hold);
+err_exp_cross = rmse_test(data_t, exp_cross);
+
+err_sqexp_noval = rmse_test(data_t, sqexp_noval);
+err_sqexp_hold = rmse_test(data_t, sqexp_hold);
+err_sqexp_cross = rmse_test(data_t, sqexp_cross);
+
+%% Plot lineair op test data
+
+plot_model(data_t, lin_noval,1,'test_lin_noval')
+plot_model(data_t, lin_hold, 1, 'test_lin_hold')
+plot_model(data_t, lin_cross, 1, 'test_lin_cross')
+
+%% Plot exp op test data
+
+plot_model(data_t, exp_noval,1,'test_exp_noval')
+plot_model(data_t, exp_hold, 1, 'test_exp_hold')
+plot_model(data_t, exp_cross, 1, 'test_exp_cross')
 
 %% Plot sqexp op test data
 
-fig13 = figure(13);
-grid();
-hold on;
-scatter(data_t.x, data_t.y, "filled");
-plot(data_t.x, sqexp_noval.predictFcn(data_t), LineWidth=3)
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig13, "Figures/sqexp_noval_test.jpg")
+plot_model(data_t, sqexp_noval,1,'test_sqexp_noval')
+plot_model(data_t, sqexp_hold, 1, 'test_sqexp_hold')
+plot_model(data_t, sqexp_cross, 1, 'test_sqexp_cross')
 
-fig14 = figure(14);
-grid();
-hold on;
-scatter(data_t.x, data_t.y, "filled");
-plot(data_t.x, sqexp_hold.predictFcn(data_t), LineWidth=3)
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig14, "Figures/sqexp_hold_test.jpg")
+%% Plot lineair actual vs predicted op test data
 
-fig15 = figure(15);
-grid();
-hold on;
-scatter(data_t.x, data_t.y, "filled");
-plot(data_t.x, sqexp_cross.predictFcn(data_t), LineWidth=3)
-legend(["Data", "Regressie"])
-xlabel("x")
-ylabel("y")
-% saveas(fig15, "Figures/sqexp_cros_test.jpg")
+predplot(data_t, lin_noval, 1, "avp_lin_noval")
+predplot(data_t, lin_hold, 1, "avp_lin_hold")
+predplot(data_t, lin_cross, 1, "avp_lin_cross")
+
+%% Plot exp actual vs predicted op test data
+
+predplot(data_t, exp_noval, 1, "avp_exp_noval")
+predplot(data_t, exp_hold, 1, "avp_exp_hold")
+predplot(data_t, exp_cross, 1, "avp_exp_cross")
+
+%% Plot sqexp actual vs predicted op test data
+
+predplot(data_t, sqexp_noval, 1, "avp_sqexp_noval")
+predplot(data_t, sqexp_hold, 1, "avp_sqexp_hold")
+predplot(data_t, sqexp_cross, 1, "avp_sqexp_cross")
+
+%% sqexp extrapoleren -> functie generate dataset wordt aangepast voor groter bereik.
+
+data_e = generate_extrapolation(12*pi, 250, 0.4);
+
+plot_model(data_e, sqexp_cross, 1, "sqexp_extra_12")
+
+data_e2 = generate_extrapolation(5*pi, 250, 0.4);
+
+plot_model(data_e2, sqexp_cross, 1, "sqexp_extra_5")
+
+
+%% sqexp ruis verhoging -> functie generate data set meermaals oproepen
+
+
+ruis = linspace(0, 1, 5);
+rmse_new = [];
+
+for i=1:length(ruis)
+    % make new dataset
+    data_n = generate_dataset(250, ruis(i));
+    % retrain model
+    [sqexp_model, rmse] = sqExp_cross(data_n);
+    rmse_new = [rmse_new, rmse];
+    % plot model
+    subplot(3,2,i)
+    ruis_t = ruis(i);
+    hold on;
+    scatter(data_n.x, data_n.y, 'filled')
+    plot(data_n.x, sqexp_model.predictFcn(data_n), LineWidth=3)
+    title("Noise: " +  ruis_t +  " RMSE: " + rmse)
+end
+
+
