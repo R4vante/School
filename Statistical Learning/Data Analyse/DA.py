@@ -9,7 +9,7 @@ import warnings
 
 class Import:
 
-    def __init__(self, file, columns, n):
+    def __init__(self, file, alpha, columns, n):
 
         self.file = file
         self.columns = columns

@@ -9,9 +9,10 @@ import warnings
 
 class Import:
 
-    def __init__(self, file, sheet_name, n, a, alpha):
+    def __init__(self, file, sheet_name, alpha, n, a):
         self.file = file
         self.sheet_name = sheet_name
+        self.alpha = alpha
         self.n = n
         self.a = a
 
@@ -51,32 +52,50 @@ class Import:
 
 class Anova_NoBlock:
 
-    def __init__(self, filename, alpha, n, a):
+    def __init__(self, filename, alpha, columns, n, a):
 
         self.filename = filename
         self.alpha = alpha
+        self.columns = columns
         self.n = n
         self.a = a
     
-    def import_df(self, sheetname):
-       
-        self.df = pd.read_excel(self.filename, sheet_name=sheetname, header = 1)
-        self.names = self.df['treatment'][:].values.tolist()
-        self.df = self.df.T.tail(-1)
+    def import_df(self):      
+        """
+        import_data Import excel file to data framme
+
+        Args:
+            filename (str): Name of the excel file
+            names (dict): dictionary of current column names and replaced column names (eg. {oldname:newname})
+
+        Returns:
+            Dataframe: Dataframe of the cleaned excel file
+        """        
+
+        self.df = pd.read_excel(self.filename, header=1)
+        self.df = self.df.dropna(axis=1)
+        self.df = self.df.loc[:,~self.df.columns.str.contains("^metingnr")]
+        self.df = self.df.rename(columns=self.columns)
+        self.names = self.df.columns.values.tolist()
+
+        # self.df = self.df.T.tail(-1)
         self.df.columns = self.names
 
         self.df_melt = pd.melt(self.df.reset_index(), id_vars="index", value_vars=self.df.columns)
         self.df_melt.columns = ["index", "treatment", "value"]
         
         self.mean = []
+        self.std = []
         for col in self.df.columns:
             means = self.df[col].values.mean()
+            stds = self.df[col].values.std()
             self.mean.append(means)
-
+            self.std.append(stds)
+        means
 
         self.df_melt["means"] = np.repeat(self.mean,self.n)
 
-        return self.df, self.df_melt, self.names, self.mean
+        return self.df, self.df_melt, self.names, self.mean, self.std
 
     def anova(self):
         """
@@ -205,19 +224,23 @@ class Anova_NoBlock:
 
 class Anova_Block:
 
-    def __init__(self, filename, alpha, n, a):
+    def __init__(self, filename, alpha, columns, n, a):
 
         self.filename = filename
+        self.alpha = alpha
+        self.columns = columns
         self.n = n
         self.a = a
-        self.alpha = alpha
 
     def melt(self, sheet_name):
 
-        self.df = pd.read_excel(self.filename, sheet_name=sheet_name, header = 1)
-        names = self.df['treatment'][:].values.tolist()
-        self.df = self.df.T.tail(-1)
-        self.df.columns = names
+        self.df = pd.read_excel(self.filename, header=1)
+        self.df = self.df.dropna(axis=1)
+        self.df = self.df.loc[:,~self.df.columns.str.contains("^metingnr")]
+        self.df = self.df.rename(columns=self.columns)
+        self.names = self.df.columns.values.tolist()
+
+        self.df.columns = self.names
 
         self.df_melt = pd.melt(self.df.reset_index(), id_vars="index", value_vars=self.df.columns)
         self.df_melt.columns = ["block", "treatment", "value"]
