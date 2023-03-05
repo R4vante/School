@@ -285,7 +285,7 @@ class Anova_Block:
 
         ind
         chance = [(i-0.5)/len(residuals) for i in ind]
-        z = stats.zscore(chance)
+        z = stats.norm.ppf(chance)
         residuals = np.transpose(residuals)
         residuals = residuals[:,np.newaxis]
         az = np.linalg.lstsq(residuals, z)
