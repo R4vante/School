@@ -111,7 +111,7 @@ class Anova:
 
 
 
-    def boxplot(self):
+    def boxplot(self, xlabel="treatment", ylabel="value"):
         """
         boxplot Creates boxplot of the values in dataframe
 
@@ -119,7 +119,7 @@ class Anova:
             df_melt (dataframe): newly formated dataframe
         """        
         plt.figure()
-        sns.boxplot(data=self.df_melt, x="treatment", y="value")
+        sns.boxplot(data=self.df_melt, x="treatment", y="value").set(xlabel = xlabel, ylabel = ylabel)
         plt.show()
 
     def norm_plot(self):
