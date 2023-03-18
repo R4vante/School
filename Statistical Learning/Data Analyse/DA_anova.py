@@ -297,7 +297,7 @@ class Anova_Block:
         residuals = self.df_melt['residual'].values.tolist()
         residuals.sort()
         residuals = np.round(residuals,2)
-        residuals
+        
         ind = [1]
 
         for i in range(1, len(residuals)):
@@ -306,7 +306,7 @@ class Anova_Block:
             else:
                 ind.append(i+1)
 
-        ind
+    
         chance = [(i-0.5)/len(residuals) for i in ind]
         z = stats.zscore(chance)
         residuals = np.transpose(residuals)
