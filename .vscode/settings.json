@@ -33,6 +33,5 @@
     "**/.vscode",
     "**/.vscode/**"
   ],
-  "C_Cpp_Runner.useAddressSanitizer": false,
-  "python.analysis.typeCheckingMode": "basic"
+  "C_Cpp_Runner.useAddressSanitizer": false
 }
