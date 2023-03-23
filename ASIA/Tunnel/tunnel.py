@@ -82,7 +82,7 @@ class Animator:
 
 def main():
 
-    packet = Wave_packet(N=500, dt=0.25, barrier_width=10, barrier_height = 0.5)
+    packet = Wave_packet(N=500, dt=30, barrier_width=10, barrier_height = 0.5)
     animator = Animator(packet)
     animator.animate()
     plt.show()
