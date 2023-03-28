@@ -29,7 +29,7 @@ class Wave_packet:
         norm = (2.0 * np.pi * self.sigma0**2)**(-0.25)
 
         self.psi = norm * np.exp(-(self.x - self.x0)**2 / (4.0 * self.sigma0**2))*np.exp(1.0j * self.k0 * self.x)
-        self.potential = self.barrier_height * ((self.x >= 0) * (self.x < self.barrier_width )).astype(float)
+        self.potential = self.barrier_height * ((self.x >= 0) * (self.x < self.barrier_width)).astype(float)
         main = 1/(self.dx**2) * np.ones(self.N) + self.potential
         off = -1/(2*self.dx**2) * np.ones(len(main)-1)
         H = sparse.diags([main, off, off], [0, 1, -1])
@@ -74,7 +74,7 @@ class Animator:
 
     def animate(self):
         self.ani = animation.FuncAnimation(
-            self.fig, self.update, frames = self.time_step, interval=5, blit=False, save_count=1000
+            self.fig, self.update, frames = self.time_step, interval=5, blit=False, save_count =500
         )
         # writer = animation.PillowWriter(fps=30)
         # self.ani.save('tunnel.gif', writer=writer)
@@ -82,7 +82,7 @@ class Animator:
 
 def main():
 
-    packet = Wave_packet(N=500, dt=30, barrier_width=10, barrier_height = 0.5)
+    packet = Wave_packet(N=500, dt=0.5, barrier_width=1, barrier_height = 10)
     animator = Animator(packet)
     animator.animate()
     plt.show()
