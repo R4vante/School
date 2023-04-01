@@ -16,6 +16,15 @@ from sklearn.model_selection import train_test_split
 class Neural:
 
     def __init__(self, dataset, activation):
+        """
+        __init__ initializing function
+
+        In this function, the inputvariables are initialized.
+
+        Args:
+            dataset (List): Used Dataset
+            activation (String): Name of the activationfunction used
+        """        
         self.dataset = dataset
         self.activation = activation
         if self.dataset == "mnist":
@@ -27,7 +36,21 @@ class Neural:
             exit()
 
     def model(self, model_name):
+        """
+        model Descides wich model is used. The model is then trained and a prediction will be made over the test set.
 
+        - small: 1 input layer, 4 hidden layers, 1 output layer
+        - big: 1 input layer, 10 hidden layers, 1 ouput layer
+        - drop: same as small layer, but with a dropout of 30% at every layer.
+        Args:
+            model_name (string): name of the model used (small, big or drop)
+
+        Returns:
+            object:
+                - model (object): the model function after training
+                - results_df (dataframe): Pandas dataframe with the results of the model (losses and accuracy)
+                - y_pred (array): array with the predictions of the testset 
+        """
         if model_name == 'small':
 
             self.model = keras.Sequential([
@@ -124,7 +147,16 @@ class Neural:
         return self.model, self.results_df, self.y_pred
 
     def plot(self):
+        """
+        plot Function for making the plots
 
+        Function returns a plots of:
+        - First training samples as indication
+        - The training and validation losses during training
+        - The training and validation accuracies during training
+        - The confusion matrix with dedicated F1-scores
+        - The first predictions of the test set
+        """
         x = tf.linspace(-5, 5, 100)
         activation_layer = layers.Activation(self.activation)
         y = activation_layer(x)
