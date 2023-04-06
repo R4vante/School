@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-plt.style.use(['seaborn-v0_8-colorblind'])
+# plt.style.use(['seaborn-v0_8-colorblind'])
 
 import pandas as pd
 
@@ -15,7 +15,17 @@ from sklearn.model_selection import train_test_split
 
 class Neural:
 
-    def __init__(self, dataset, activation):
+    def __init__(self, dataset, activation, model_name):
+        """
+        __init__ initializing function
+
+        In this function, the inputvariables are initialized.
+
+        Args:
+            dataset (List): Used Dataset
+            activation (String): Name of the activationfunction used
+        """        
+        self.model_name = model_name
         self.dataset = dataset
         self.activation = activation
         if self.dataset == "mnist":
@@ -26,9 +36,23 @@ class Neural:
             print("no dataset imported")
             exit()
 
-    def model(self, model_name):
+    def model(self):
+        """
+        model Descides wich model is used. The model is then trained and a prediction will be made over the test set.
 
-        if model_name == 'small':
+        - small: 1 input layer, 4 hidden layers, 1 output layer
+        - big: 1 input layer, 10 hidden layers, 1 ouput layer
+        - drop: same as small layer, but with a dropout of 30% at every layer.
+        Args:
+            model_name (string): name of the model used (small, big or drop)
+
+        Returns:
+            object:
+                - model (object): the model function after training
+                - results_df (dataframe): Pandas dataframe with the results of the model (losses and accuracy)
+                - y_pred (array): array with the predictions of the testset 
+        """
+        if self.model_name == 'small':
 
             self.model = keras.Sequential([
                 layers.Flatten(input_shape=(self.X_train.shape[1], self.X_train.shape[2])),
@@ -40,7 +64,7 @@ class Neural:
         ])
 
 
-        elif model_name == 'big':
+        elif self.model_name == 'big':
 
             self.model = keras.Sequential([
                 layers.Flatten(input_shape=(self.X_train.shape[1], self.X_train.shape[2])),
@@ -58,7 +82,7 @@ class Neural:
         ])
 
 
-        elif model_name == 'drop':
+        elif self.model_name == 'drop':
             self.model = keras.Sequential([
                 layers.Flatten(input_shape=(self.X_train.shape[1], self.X_train.shape[2])),
                 layers.Dropout(0.3),
@@ -124,13 +148,22 @@ class Neural:
         return self.model, self.results_df, self.y_pred
 
     def plot(self):
+        """
+        plot Function for making the plots
 
+        Function returns a plots of:
+        - First training samples as indication
+        - The training and validation losses during training
+        - The training and validation accuracies during training
+        - The confusion matrix with dedicated F1-scores
+        - The first predictions of the test set
+        """
         x = tf.linspace(-5, 5, 100)
         activation_layer = layers.Activation(self.activation)
         y = activation_layer(x)
 
 
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(15, 10))
         ax.grid(True)
         ax.plot(x, y)
         
@@ -148,8 +181,49 @@ class Neural:
         ax[1].set_xlabel('epoch')
         ax[1].set_ylabel('accuracy  ')
 
+        # Zoom in on losses
+
+        fig, ax = plt.subplots()
+
+        if self.model_name == "small" or self.model_name=='drop':
+            self.results_df.loc[5:, ['loss', 'val_loss']].plot(ax=ax, grid=True)
+
+            ax.set_xlabel('epoch')
+            ax.set_ylabel('Loss')
+
+        elif self.model_name == "big":
+            self.results_df.loc[2:, ['loss', 'val_loss']].plot(ax=ax, grid=True)
+
+            ax.set_xlabel('epoch')
+            ax.set_ylabel('Loss')
+
+
 
         # confusion matrix
+
+        if self.activation == 'linear':
+            y_train_p = self.model.predict(self.X_train)
+            y_train_p = [np.argmax(i) for i in y_train_p] 
+            y_valid_p = self.model.predict(self.X_valid)
+            y_valid_p = [np.argmax(i) for i in y_valid_p]
+            cm_train = confusion_matrix(self.y_train, y_train_p)
+            cm_valid = confusion_matrix(self.y_valid, y_valid_p)
+
+            fig, ax = plt.subplots()
+
+            sns.heatmap(cm_train, annot=True, fmt='d', ax = ax)
+
+            ax.set_xlabel('Actual')
+            ax.set_ylabel('Predicted')
+            ax.set_xlabel('Actual')
+            ax.set_ylabel('Predicted')
+
+            fig, ax = plt.subplots()
+            sns.heatmap(cm_valid, annot=True, fmt='d', ax = ax)
+            ax.set_xlabel('Actual')
+            ax.set_ylabel('Predicted')
+            ax.set_xlabel('Actual')
+            ax.set_ylabel('Predicted')
 
         cm = confusion_matrix(self.y_test, self.y_pred)
 
