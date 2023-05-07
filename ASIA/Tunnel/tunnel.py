@@ -1,12 +1,8 @@
-import matplotlib
 import numpy as np
-# matplotlib.use('Qt4Agg')
 import matplotlib.pyplot as plt 
-import scipy as sp
 from scipy.sparse import linalg as ln
 from scipy import sparse as sparse
 import matplotlib.animation as animation
-from IPython.display import HTML
  
 
 class Wave_packet:
