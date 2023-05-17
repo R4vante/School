@@ -34,8 +34,7 @@ class ResCO2:
             plt.vlines(self.L[i][np.argmax(self.counts[i])], 0, np.max(self.counts[i]), linestyle='--', color='k', linewidth=1)
             plt.plot(self.L[i], self.counts[i])
             plt.title(f"Meting {i+1}")
-            plt.text(1.1*self.L[i][np.argmax(self.counts[i])], 0.5*np.max(self.counts[i]), f'$\lambda$ = {(self.L[i][np.argmax(self.counts[i])]):.2f}\ncounts = {np.max(self.counts[i])}')
+            plt.text(1.1*self.L[i][np.argmax(self.counts[i])], 0.85*np.max(self.counts[i]), f'$\lambda$ = {(self.L[i][np.argmax(self.counts[i])]):.2f}\ncounts = {np.max(self.counts[i])}')
 
         plt.show()
 
-        print(self.L)
