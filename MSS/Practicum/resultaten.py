@@ -1,38 +1,41 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-plt.style.use(["seaborn-v0_8-colorblind"])
+import pandas as pd
 
+class ResCO2:
 
-def main():
+    def __init__(self, file):
+        
+        self.file = file
 
-    xls = pd.ExcelFile('Metingen/2_CO2_P.xlsx') 
+        xls = pd.ExcelFile(file)
 
-    xls_sheetnames = ['mt1', 'mt2', 'mt3', 'mt4', 'mt5', 'mt6', 'mt7', 'mt8', 'mt9', 'mt10']
+        self.xls_sheetnames = xls.sheet_names
+        self.xls_sheetnames.remove(self.xls_sheetnames[0])
 
-    df_map = {}
+        self.df_map = {}
 
-    for sheet_name in xls_sheetnames:
-        df_map[sheet_name] = xls.parse(sheet_name)
+        for sheet_name in self.xls_sheetnames:
+            self.df_map[sheet_name] = xls.parse(sheet_name)
 
-    L = []
-    counts = []
+    def plot(self):
 
-    for i in range(len(xls_sheetnames)):
-        L.append(df_map[xls_sheetnames[i]]["L (nm)"])
-        counts.append(df_map[xls_sheetnames[i]].counts)
-    
-    fig = plt.subplots(2,2,figsize=(10,12))
+        self.L = []
+        self.counts = []
 
-    for i in range(4):
-        plt.subplot(2,2,i+1)
-        plt.plot(L[i], counts[i])
-        plt.text(x=L[i][counts[i].argmax()]*1.1, y=0.7*np.max(counts[i]), s=f"$\lambda$ ={L[i][counts[i].argmax()]:.2f}\ncounts={np.max(counts[i])}")
-        plt.vlines(x=L[i][counts[i].argmax()], ymin=0, ymax=np.max(counts[i]) + 100, color='k', linewidth=1, linestyle='--')
-        plt.title(f"Meting {i+1}")
+        for i in range(len(self.xls_sheetnames)):
+            self.L.append(self.df_map[self.xls_sheetnames[i]]['L (nm)'])
+            self.counts.append(self.df_map[self.xls_sheetnames[i]].counts)
 
-    plt.show()
-    
-   
-if __name__ == "__main__":
-    main()
+        fig = plt.subplots(2,2, figsize=(15,10))
+
+        for i in range(4):
+            plt.subplot(2,2, i+1)
+            plt.vlines(self.L[i][np.argmax(self.counts[i])], 0, np.max(self.counts[i]), linestyle='--', color='k', linewidth=1)
+            plt.plot(self.L[i], self.counts[i])
+            plt.title(f"Meting {i+1}")
+            plt.text(1.1*self.L[i][np.argmax(self.counts[i])], 0.5*np.max(self.counts[i]), f'$\lambda$ = {(self.L[i][np.argmax(self.counts[i])]):.2f}\ncounts = {np.max(self.counts[i])}')
+
+        plt.show()
+
+        print(self.L)
