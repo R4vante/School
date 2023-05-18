@@ -40,6 +40,24 @@ class ResCO2:
             plt.ylabel('counts')
             plt.text(1.1*self.L[i][np.argmax(self.counts[i])], 0.85*np.max(self.counts[i]), f'$\lambda$ = {(self.L[i][np.argmax(self.counts[i])]):.2f}\ncounts = {np.max(self.counts[i]):.1f}')
 
+        self.P = [2.1e-1, 2.9e-1, 4.1e-1, 5.6e-1, 8.0e-1, 9.2e-1, 1.2e0, 1.8e0, 2.2e0, 3.3e0, 4.3e0]
+        self.voltage = [0.6, 0.6, 0.6, 0.7, 0.8, 0.9, 1.0, 1.3, 1.5, 1.9, 2.5]
+        self.max_counts = [np.max(self.counts[i]) for i in range(len(self.counts))]
+    
+        fig, ax = plt.subplots()
+        plt.yscale("log") 
+        ax.scatter(self.P, self.max_counts) 
+        ax.set_xlabel("P (mbar)")
+        ax.set_ylabel("counts")
+        ax.grid()
+
+        fig, ax = plt.subplots()
+        ax.scatter(self.voltage, self.P)
+        ax.set_xlabel("Breakout voltage")
+        ax.set_ylabel("counts")
+        ax.grid()
+       
+
 class ResN2:
 
     def __init__(self, file):
@@ -99,6 +117,7 @@ class ResN2:
         self.P = [2.3e-1, 5.2e-1, 1.0e0, 2.1e0, 3.2e0, 4.1e0, 5.4e0]
 
         fig, ax = plt.subplots()
+        plt.yscale("log")
         ax.scatter(self.P, self.counts_p)
         ax.set_xlabel('P (mbar)')
         ax.set_ylabel("counts")

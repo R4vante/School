@@ -19,6 +19,9 @@ def main():
     
     res = resultaten.ResCO2("Metingen/2_CO2_P.xlsx")
     res.plot()
+
+    plt.show()
+
     resN2 = resultaten.ResN2("Metingen/N2_P_meting.xlsx")
     resN2.plot()
 
