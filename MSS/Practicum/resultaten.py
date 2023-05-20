@@ -4,8 +4,23 @@ plt.rc('axes', axisbelow=True)
 import pandas as pd
 
 class ResCO2:
-
+    """
+     Class to plot the results of C02 measurements
+    """
     def __init__(self, file):
+
+        """
+        Function: _init__
+
+        Initializing the parameters
+        
+
+
+        Parameters:
+            
+            -file (str): file path
+
+        """
         
         self.file = file
 
@@ -20,6 +35,12 @@ class ResCO2:
             self.df_map[sheet_name] = xls.parse(sheet_name)
 
     def plot(self):
+        """
+        Plot: Ploting the results for CO2 measurements. Results plotted:
+            - Results spectrometry per measured pressure
+            - Highest counts against pressure (logarthmic y-axis)
+            - Pressure against breakout voltage
+        """
 
         self.L = []
         self.counts = []
@@ -60,7 +81,21 @@ class ResCO2:
 
 class ResN2:
 
+    """
+    Class to plot N2 measurement results
+    """
+
     def __init__(self, file):
+        """
+        Function: __init__:
+
+        Initializing parameters
+
+
+
+        Parameters:
+            - file (str): file path to excel file
+        """
 
         self.file = file
 
@@ -77,6 +112,17 @@ class ResN2:
         
 
     def plot(self):
+
+        """
+        Function: Plot
+
+        Plotting results of the N2 measurement. Plots created:
+            - Results spectrometry per measured pressure
+            - Highest counts against pressure (logarthmic y-axis)
+        """
+# TODO: create plot against breakdown volage
+
+
 
         self.L = []
         self.counts = []
@@ -115,6 +161,12 @@ class ResN2:
 
         self.counts_p = [np.max(self.counts_peak[i]) for i in range(len(self.counts_peak))]
         self.P = [2.3e-1, 5.2e-1, 1.0e0, 2.1e0, 3.2e0, 4.1e0, 5.4e0]
+
+
+
+
+# NOTE: The counts vs pressure doesn't seem to be linear. Needs to be fixed --> could be due to the fact of chosing the second hightest peak instead of highest.
+
 
         fig, ax = plt.subplots()
         plt.yscale("log")
