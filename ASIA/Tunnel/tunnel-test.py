@@ -1,106 +1,107 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-
-x = np.linspace(-10, 10, 5000)
-dx = x[1] - x[0]
-
-def norm(phi):
-    norm = np.sum(np.square(np.abs(phi)))*dx
-    return phi/np.sqrt(norm)
+from scipy.linalg import eigh_tridiagonal
+from matplotlib.animation import FuncAnimation, PillowWriter
 
 
-def complex_plot(x,y,prob=True,**kwargs):
-    real = np.real(y)
-    imag = np.imag(y)
-    a,*_ = plt.plot(x,real,label='Re',**kwargs)
-    b,*_ = plt.plot(x,imag,label='Im',**kwargs)
-    plt.xlim(-2,2)
-    if prob:
-        p,*_ = plt.plot(x,np.abs(y),label='$\sqrt{P}$')
-        return a,b,p
-    else:
-        return a,b
+class Wave_packet:
+# NOTE: Code voor het maken van een golfpacket geven in de opgave. Verder uitleg geven 
+# over hoe de class opgeroepen moet worden.
+
+    def __init__(self, N, x0, sigma0, x_begin, x_end, k0 = 0):
+       
+        self.N = N
+        self.x0 = x0
+        self.sigma0 = sigma0
+        self.x_begin = x_begin
+        self.x_end = x_end
+        self.k0 = k0
+        self.x, self.dx = np.linspace(self.x_begin, self.x_end, self.N, retstep=True)        
+
+    def packet(self):
+        self.psi0 = np.exp(-(self.x-self.x0)**2/(2*self.sigma0)**2) * np.exp(-1j * self.k0 * self.x)
+        norm = np.sum(np.abs(self.psi0)**2*self.dx, axis=0)
+        self.psi0 = self.psi0 / np.sqrt(norm)
+        return self.psi0
+#---------------------------
+# NOTE: Alles hieronder niet meeleveren in de opgave
+    def potential(self):
+        a = -1/(0.5 + 0.5)
+        k1 = (3+0.5 + a *(self.x + 0.5)) * ((self.x>=-0.5) * (self.x <= 0.5))
+        k2 = (1+1)* ((self.x>=self.x_begin) * (self.x < -0.5))
+        return k1+k2
+        
+    def get_e(self):
+
+        self.V = self.potential()
+        main = 1/self.dx**2 + self.V
+        off = -1/(2*self.dx**2) * np.ones(len(main)-1)
+
+        self.E, self.psi = eigh_tridiagonal(main, off)
+
+        self.psi = self.psi.T
+
+        norm = np.sum(np.abs(self.psi)**2*self.dx, axis=0)
+        self.psi = self.psi/np.sqrt(np.abs(norm))
+
+        return self.E, self.psi
 
 
-def wave_packet(pos=0,mom=0,sigma=0.2):
-    return norm(np.exp(-1j*mom*x)*np.exp(-np.square(x-pos))/sigma/sigma)
+    def get_t(self, t):
+
+        E, psi = self.get_e()
+        psi0 = self.packet()
+
+        self.cn = np.zeros_like(psi[0], dtype=complex)
+
+        for j in range(0, self.N-1):
+
+            self.cn[j] = np.sum(np.conj(psi[j]) * psi0 * self.dx)
+
+        self.psi_t = psi.T@(self.cn*np.exp(-1j*E*t))
+        norm = np.sum(np.abs(self.psi_t)**2 * self.dx)
+        self.psi_t = self.psi_t / np.sqrt(norm)
+        return self.psi_t
 
 
-def d_dxdx(phi,x=x):
-    dphi_dxdx = -2*phi
-    dphi_dxdx[:-1] += phi[1:]
-    dphi_dxdx[1:] += phi[:-1]
-    return dphi_dxdx/dx
+def main():
+   
+    packet = Wave_packet(1000, -20, 5, -150, 150, k0=-1)
+    t = np.linspace(0, 25, 1000)
 
-def d_dt(phi,h=1,m=100,V=0):
-    return 1j*h/2/m * d_dxdx(phi) - 1j*V*phi/h
+    psi0 = packet.packet()
 
-def euler(phi, dt, **kwargs):
-    return phi + dt * d_dt(phi, **kwargs)
+    # NOTE: code voor de animatie niet meegeven, wel uitleggen
 
-def rk4(phi, dt, **kwargs):
-    k1 = d_dt(phi, **kwargs)
-    k2 = d_dt(phi+dt/2*k1, **kwargs)
-    k3 = d_dt(phi+dt/2*k2, **kwargs)
-    k4 = d_dt(phi+dt*k3, **kwargs)
-    return phi + dt/6*(k1+2*k2+2*k3+k4)
+    # fig  = plt.figure(figsize = (20,12))
+    # ax = plt.axes(xlim=(-50, 50))
+    # ax.plot(packet.x, np.max(np.abs(psi0)**2) * packet.potential()/np.max(packet.potential()), 'r--')
 
-def simulate(phi_sim, 
-             method='rk4', 
-             V=0, 
-             steps=100000, 
-             dt=1e-1, 
-             condition=None, 
-             normalize=True,
-             save_every=100):
-    simulation_steps = [np.copy(phi_sim)]
-    for i in range(steps):
-        if method == 'euler':
-            phi_sim = euler(phi_sim,dt,V=V)
-        elif method == 'rk4':
-            phi_sim = rk4(phi_sim,dt,V=V)
-        else:
-            raise Exception(f'Unknown method {method}')
-        if condition:
-            phi_sim = condition(phi_sim)
-        if normalize:
-            phi_sim = norm(phi_sim)
-        if save_every is not None and (i+1) % save_every == 0:
-            simulation_steps.append(np.copy(phi_sim))
-    return simulation_steps
+#     ln, = ax.plot([],[])
+#
+#     def animate(i):
+#
+#         ln.set_data(packet.x, np.abs(packet.get_t(i))**2)
+#         return ln,
+#
+#     ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
+#     # ani.save('test.mp4', fps=30, dpi=100)
+#
+#     psi_l = packet.get_t(25)[packet.x <=0]
+#     psi_r = packet.get_t(25)[packet.x > 0]
+#
+#     T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
+#     R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
+#     print(T + R)
+#
+#     plt.show()
 
 
-sim_free = simulate(wave_packet(mom=-10),steps=200000,save_every=1000)
+    psi_t = packet.get_t(60)
 
-
-def animate(simulation_steps,init_func=None):
-    fig = plt.figure()
-    re,im,prob = complex_plot(x,simulation_steps[0])
-    plt.xlim(-2,2)
-    plt.ylim(-2,2)
-    if init_func:
-        init_func()
-    plt.legend()
-
-    def animate(frame):
-        prob.set_data((x, np.abs(simulation_steps[frame])))
-        re.set_data((x, np.real(simulation_steps[frame])))
-        im.set_data((x, np.imag(simulation_steps[frame])))
-        return prob,re,im
-
-    anim = FuncAnimation(fig, animate, frames=int(len(simulation_steps)), interval=100)
+    plt.plot(packet.x, np.abs(psi_t)**2)
     plt.show()
 
-    return anim
-
-barrier_weak_potential = np.where((x>1.4)&(x<1.6),3.5e-2,0)
-sim_barrier_mom = simulate(wave_packet(mom=10),V=barrier_weak_potential,steps=50000,save_every=500)
-
-def barrier_init():
-    plt.gcf().axes[0].axvspan(1.4, 1.6, alpha=0.2, color='orange')
-    plt.xlim(-2,4)
-    plt.ylim(-3,3)
-animate(sim_barrier_mom,init_func=barrier_init)
-
-
+if __name__ == "__main__":
+#
+    main()
