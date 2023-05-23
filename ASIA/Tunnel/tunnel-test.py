@@ -26,11 +26,12 @@ class Wave_packet:
 #---------------------------
 # NOTE: Alles hieronder niet meeleveren in de opgave
     def potential(self):
-        a = -1/(0.5 + 0.5)
-        k1 = (3+0.5 + a *(self.x + 0.5)) * ((self.x>=-0.5) * (self.x <= 0.5))
-        k2 = (1+1)* ((self.x>=self.x_begin) * (self.x < -0.5))
-        return k1+k2
-        
+        return 1 * ((self.x >= -0.5) * (self.x <=0.5)).astype(float)
+        # a = -1/(0.5 + 0.5)
+        # k1 = (3+0.5 + a *(self.x + 0.5)) * ((self.x>=-0.5) * (self.x <= 0.5))
+        # k2 = (1+1)* ((self.x>=self.x_begin) * (self.x < -0.5))
+        # return k1+k2
+        # 
     def get_e(self):
 
         self.V = self.potential()
@@ -73,34 +74,32 @@ def main():
 
     # NOTE: code voor de animatie niet meegeven, wel uitleggen
 
-    # fig  = plt.figure(figsize = (20,12))
-    # ax = plt.axes(xlim=(-50, 50))
-    # ax.plot(packet.x, np.max(np.abs(psi0)**2) * packet.potential()/np.max(packet.potential()), 'r--')
+    fig  = plt.figure(figsize = (20,12))
+    ax = plt.axes(xlim=(-50, 50))
+    ax.plot(packet.x, np.max(np.abs(psi0)**2) * packet.potential()/np.max(packet.potential()), 'r--')
 
-#     ln, = ax.plot([],[])
-#
-#     def animate(i):
-#
-#         ln.set_data(packet.x, np.abs(packet.get_t(i))**2)
-#         return ln,
-#
-#     ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
-#     # ani.save('test.mp4', fps=30, dpi=100)
-#
-#     psi_l = packet.get_t(25)[packet.x <=0]
-#     psi_r = packet.get_t(25)[packet.x > 0]
-#
-#     T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
-#     R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
-#     print(T + R)
-#
-#     plt.show()
+    ln, = ax.plot([],[])
 
+    def animate(i):
 
-    psi_t = packet.get_t(60)
+        ln.set_data(packet.x, np.abs(packet.get_t(i))**2)
+        return ln,
 
-    plt.plot(packet.x, np.abs(psi_t)**2)
+    ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
+    # ani.save('test.mp4', fps=30, dpi=100)
+
+    psi_l = packet.get_t(25)[packet.x <=0]
+    psi_r = packet.get_t(25)[packet.x > 0]
+    E, psi = packet.get_e()
+
+    T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
+    R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
+    a = np.sqrt(2*(np.max(packet.potential() - packet.cn**2 * E)))
+    Tt = np.sum((1 + 1/4 * (np.max(packet.potential())**2)/(packet.cn**2*E *(-np.max(packet.potential())+packet.cn**2*E))*np.sinh(a)**2 + 1e-6)**(-1))
+    print(T, Tt)
+
     plt.show()
+
 
 if __name__ == "__main__":
 #
