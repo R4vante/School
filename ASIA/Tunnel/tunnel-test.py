@@ -85,7 +85,7 @@ def main():
         ln.set_data(packet.x, np.abs(packet.get_t(i))**2)
         return ln,
 
-    ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
+    # ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
     # ani.save('test.mp4', fps=30, dpi=100)
 
     psi_l = packet.get_t(25)[packet.x <=0]
@@ -94,9 +94,17 @@ def main():
 
     T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
     R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
-    a = np.sqrt(2*(np.max(packet.potential() - packet.cn**2 * E)))
-    Tt = np.sum((1 + 1/4 * (np.max(packet.potential())**2)/(packet.cn**2*E *(-np.max(packet.potential())+packet.cn**2*E))*np.sinh(a)**2 + 1e-6)**(-1))
+
+    if E < np.max(packet.potential()):
+        k1 = 1 + np.max(packet.potential())/(4*E * (np.max(packet.potential()) - E))
+        k2 = 2 * np.sqrt(2*(np.max(packet.potential()) - E))
+
+    T1 = k1 * np.sinh(k2)**2
+
+    Tt = T1**(-1)
+
     print(T, Tt)
+
 
     plt.show()
 
