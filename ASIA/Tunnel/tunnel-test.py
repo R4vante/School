@@ -119,7 +119,7 @@ def main():
         ln.set_data(packet.x, np.abs(packet.get_t(i))**2)
         return ln,
 
-    ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
+    # ani = FuncAnimation(fig, animate, frames = 100, interval=50, blit=False)
     # ani.save('test.mp4', fps=30, dpi=100)
 
     psi_l = packet.get_t(60)[packet.x <=0]
@@ -149,6 +149,22 @@ def main():
 
     plt.scatter(bw, T_i)
 
+
+<<<<<<< HEAD
+=======
+    T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
+    R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
+
+    if E < np.max(packet.potential()):
+        k1 = 1 + np.max(packet.potential())/(4*E * (np.max(packet.potential()) - E))
+        k2 = 2 * np.sqrt(2*(np.max(packet.potential()) - E))
+
+    T1 = k1 * np.sinh(k2)**2
+
+    Tt = T1**(-1)
+
+    print(T, Tt)
+>>>>>>> c097fb3c38a908c01efe7841d9b7197f8fb29b5f
 
 
     plt.show()
