@@ -40,6 +40,22 @@ def main():
         plt.subplot(1,2,i+1)
         plt.yscale('log')
         plt.scatter(P[i], counts_p[i])
+        plt.ylabel(r"$\log_{10} \left(counts\right)$")
+        plt.xlabel("P (mbar)")
+        plt.grid(True)
+
+    P = [res.P, resLuftco2.P]
+    counts_p = [res.max_counts, resLuftco2.counts_p]
+
+    fig = plt.figure("CO2 + Air")
+    # ax = plt.subplots(1,2)
+    for i in range(len(P)):
+        plt.subplot(1,2,i+1)
+        plt.yscale('log')
+        plt.scatter(P[i], counts_p[i])
+        plt.ylabel(r"$\log_{10} \left(counts\right)$")
+        plt.xlabel("P (mbar)")
+        plt.grid(True)
 
     plt.show()
     

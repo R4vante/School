@@ -180,7 +180,7 @@ class ResN2:
         plt.yscale("log")
         ax.scatter(self.P, self.counts_p)
         ax.set_xlabel('P (mbar)')
-        ax.set_ylabel("counts")
+        ax.set_ylabel(r"$\log_{10} \left(counts\right)$")
         ax.grid(True)
 
         fig = plt.figure("N2 voltage")
@@ -288,7 +288,7 @@ class ResLuftN2:
         plt.yscale("log")
         ax.scatter(self.P, self.counts_p)
         ax.set_xlabel('P (mbar)')
-        ax.set_ylabel("counts")
+        ax.set_ylabel(r"$\log_{10} \left(counts\right)$")
         ax.grid(True)
 
         fig = plt.figure("Luft voltage")
@@ -376,7 +376,7 @@ class ResLuftCO2:
         plt.yscale("log")
         ax.scatter(self.P, self.counts_p)
         ax.set_xlabel('P (mbar)')
-        ax.set_ylabel("counts")
+        ax.set_ylabel(r"$\log_{10} \left(counts\right)$")
         ax.grid(True)
 
         fig = plt.figure("Luft-CO2 voltage")
