@@ -133,38 +133,23 @@ def main():
 
     T_i = []
 
-    for i in bw:
-        packet = Wave_packet(1000, -20, 5, -150, 150, k0=-1, bw=i)
+    # for i in bw:
+    #     packet = Wave_packet(1000, -20, 5, -150, 150, k0=-1, bw=i)
 
-        psi_l = packet.get_t(60)[packet.x <=0]
-        psi_r = packet.get_t(60)[packet.x > 0]
-        T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(120)**2) * packet.dx)
-        R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(120)**2) * packet.dx)
+    #     psi_l = packet.get_t(60)[packet.x <=0]
+    #     psi_r = packet.get_t(60)[packet.x > 0]
+    #     T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(120)**2) * packet.dx)
+    #     R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(120)**2) * packet.dx)
 
-        T_i.append(T)
+    #     T_i.append(T)
 
          
 
-    plt.figure()
+    # plt.figure()
 
-    plt.scatter(bw, T_i)
+    # plt.scatter(bw, T_i)
 
 
-<<<<<<< HEAD
-=======
-    T = np.sum(np.abs(psi_r)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
-    R = np.sum(np.abs(psi_l)**2 * packet.dx)/np.sum(np.abs(packet.get_t(25)**2) * packet.dx)
-
-    if E < np.max(packet.potential()):
-        k1 = 1 + np.max(packet.potential())/(4*E * (np.max(packet.potential()) - E))
-        k2 = 2 * np.sqrt(2*(np.max(packet.potential()) - E))
-
-    T1 = k1 * np.sinh(k2)**2
-
-    Tt = T1**(-1)
-
-    print(T, Tt)
->>>>>>> c097fb3c38a908c01efe7841d9b7197f8fb29b5f
 
 
     plt.show()

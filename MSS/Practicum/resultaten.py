@@ -153,12 +153,12 @@ class ResN2:
 
         fig = plt.figure("N2 spectra", figsize=(15,10))
 
-        for i in range(4):
-            plt.subplot(2,2,i+1)
+        for i in range(1):
+            plt.subplot(1,1,i+1)
             plt.grid(True)
             plt.vlines(self.L_peak[i][np.argmax(self.counts_peak[i])], 0, np.max(self.counts_peak[i]), linestyle = '--', color='k', linewidth=1)
             plt.plot(self.L[i], self.counts[i])
-            plt.title(f"P = {self.P[i]} mbar")
+            # plt.title(f"P = {self.P[i]} mbar")
             plt.xlabel("$\lambda$ (nm)")
             plt.ylabel('counts')
             plt.text(1.1*self.L_peak[i][np.argmax(self.counts_peak[i])], 0.85*np.max(self.counts_peak[i]), f'$\lambda$ = {(self.L_peak[i][np.argmax(self.counts_peak[i])]):.2f}\ncounts = {np.max(self.counts_peak[i]):.1f}')
@@ -264,6 +264,7 @@ class ResLuftN2:
         for i in range(4):
             plt.subplot(2,2,i+1)
             plt.grid(True)
+            plt.xlim([200, 440])
             plt.vlines(self.L_peak[i][np.argmax(self.counts_peak[i])], 0, np.max(self.counts_peak[i]), linestyle = '--', color='k', linewidth=1)
             plt.plot(self.L[i], self.counts[i])
             plt.title(f"P = {self.P[i]} mbar")
