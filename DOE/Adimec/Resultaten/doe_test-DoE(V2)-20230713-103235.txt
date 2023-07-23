@@ -1,0 +1,8 @@
+DoE(V2)
+Proefstuk	Helling (N/mm)	Markering tijd - Start 	Markering tijd - Einde 
+27	331,858	2023-07-13 10:22:42	2023-07-13 10:22:52
+28	344,037	2023-07-13 10:32:07	2023-07-13 10:32:23
+Gemiddelde	337,948
+SD	8,611
+Min	331,858
+Max	344,037
