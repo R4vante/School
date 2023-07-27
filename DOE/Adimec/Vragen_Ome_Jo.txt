@@ -1,0 +1,7 @@
+- Response surface de goede richting?
+- Wat zegt de R-sq waarde voor discrete variabelen?
+- Alternatief voor het uitvinden van signifcantie van AD term.
+- Waar op letten bij slijten van variabelen? --> Veel termen niet significant lijken.
+- Klopt de gedachtegang van het gecreeërde model? (B,C,D,E voor alle modellen significant)
+	--> Geprobeerd met en zonder D, echter zonder D is er clustervorming.
+- Clustervorming? (clusters: A, C, D, E, AD, CE) --> Officieel zat BD-term erbij, maar door de verandering van gedachtegang is deze nu weggelaten.
