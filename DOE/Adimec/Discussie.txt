@@ -1,0 +1,5 @@
+- Sample +---- is opnieuw gemaakt (uitgebroken bij 95). Hierdoor is een vooraf onbelaste sample getest bij 105 graden. Dit wijkt af van de andere samples. Dit hebben ook gedaan met een sample na -45 graden (sample 31).
+
+- Bij 95 (1 sample) maar vooral 105 graden is er een rare curve te zien. Wij hadden t vermoeden dat dit kwam doordat de lijm stroperig werd. Bram vertelde dat dit waarschijnlijk niet onze lijm is maar de lijm tussen het glasplaatje en de sensor.
+
+- Bij het eruit halen van de samples koelen deze af/warme deze op. Hierdoor zal er bij elke sample op het meetmoment een variatie zitten in temp ten opzichte van elkaar. Dit kon ook niet verbeterd worden, aangezien er geen andere meetopstelling was.
